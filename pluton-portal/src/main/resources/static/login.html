@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .form input {
+            width: 300px;
+            height: 30px;
+            font-size: 18px;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #fff;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .form input::placeholder {
+            font-family: "Calibri Light";
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            font-family: "neo";
+        }
+
+        .confirm {
+            height: 0;
+            overflow: hidden;
+            transition: .25s;
+        }
+
+        .btn {
+            width: 140px;
+            height: 40px;
+            border: 1px solid #fff;
+            background: none;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 25px;
+            font-family: "neo";
+            transition: .25s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, .25);
+        }
+
+        #login_wrap {
+            width: 980px;
+            min-height: 500px;
+            border-radius: 10px;
+            font-family: "neo";
+            overflow: hidden;
+            box-shadow: 0px 0px 120px rgba(0, 0, 0, 0.25);
+            position: fixed;
+            top: 50%;
+            right: 50%;
+            margin-top: -250px;
+            margin-right: -490px;
+        }
+
+        #login {
+            width: 50%;
+            height: 100%;
+            min-height: 500px;
+            background: linear-gradient(45deg, #9a444e, #e06267);
+            position: relative;
+            float: right;
+        }
+
+        #login #status {
+            width: 90px;
+            height: 35px;
+            margin: 40px auto;
+            color: #fff;
+            font-size: 30px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        i {
+            font-family: "Calibri Light";
+            font-size: 30px;
+        }
+
+        #login #status i {
+            font-style: normal;
+            position: absolute;
+            transition: .5s
+        }
+
+        #login span {
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            margin-left: -150px;
+            top: 52%;
+            margin-top: -140px;
+        }
+
+        #login span a {
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            margin-top: 80px;
+            font-size: 18px;
+        }
+
+        #bg {
+            background: linear-gradient(45deg, #211136, #bf5853);
+            height: 100%;
+        }
+
+        #login_img {
+            width: 50%;
+            min-height: 500px;
+            background: linear-gradient(45deg, #221334, #6c3049);
+            float: left;
+            position: relative;
+        }
+
+        #login_img span {
+            position: absolute;
+            display: block;
+        }
+
+        #login_img .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #df5555, #ef907a);
+            top: 70px;
+            left: 50%;
+            margin-left: -100px;
+            overflow: hidden;
+        }
+
+        #login_img .circle span {
+            width: 150px;
+            height: 40px;
+            border-radius: 50px;
+            position: absolute;
+        }
+
+        #login_img .circle span:nth-child(1) {
+            top: 30px;
+            left: -38px;
+            background: #c55c59;
+        }
+
+        #login_img .circle span:nth-child(2) {
+            bottom: 20px;
+            right: -35px;
+            background: #934555;
+        }
+
+        #login_img .star span {
+            background: radial-gradient(#fff 10%, #fff 20%, rgba(72, 34, 64, 0));
+            border-radius: 50%;
+            box-shadow: 0 0 7px #fff;
+        }
+
+        #login_img .star span:nth-child(1) {
+            width: 15px;
+            height: 15px;
+            top: 50px;
+            left: 30px;
+        }
+
+        #login_img .star span:nth-child(2) {
+            width: 10px;
+            height: 10px;
+            left: 360px;
+            top: 80px;
+        }
+
+        #login_img .star span:nth-child(3) {
+            width: 5px;
+            height: 5px;
+            top: 400px;
+            left: 80px;
+        }
+
+        #login_img .star span:nth-child(4) {
+            width: 8px;
+            height: 8px;
+            top: 240px;
+            left: 60px;
+        }
+
+        #login_img .star span:nth-child(5) {
+            width: 4px;
+            height: 4px;
+            top: 20px;
+            left: 200px;
+        }
+
+        #login_img .star span:nth-child(6) {
+            width: 4px;
+            height: 4px;
+            top: 460px;
+            left: 410px;
+        }
+
+        #login_img .star span:nth-child(7) {
+            width: 6px;
+            height: 6px;
+            top: 250px;
+            left: 350px;
+        }
+
+        #login_img .fly_star span {
+            width: 90px;
+            height: 3px;
+            background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0.67), rgba(255, 255, 255, 0));
+            background: -o-linear-gradient(left, rgba(255, 255, 255, 0.67), rgba(255, 255, 255, 0));
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.67), rgba(255, 255, 255, 0));
+            transform: rotate(-45deg);
+        }
+
+        #login_img .fly_star span:nth-child(1) {
+            top: 60px;
+            left: 80px;
+        }
+
+        #login_img .fly_star span:nth-child(2) {
+            top: 210px;
+            left: 332px;
+            opacity: 0.6;
+        }
+
+        #login_img p {
+            text-align: center;
+            color: #af4b55;
+            font-weight: 600;
+            margin-top: 365px;
+            font-size: 25px;
+        }
+
+        #login_img p i {
+            font-family: "Calibri Light";
+
+            font-style: normal;
+            margin-right: 45px;
+        }
+
+        #login_img p i:nth-last-child(1) {
+            margin-right: 0;
+        }
+
+        #hint {
+            width: 100%;
+            line-height: 70px;
+            background: linear-gradient(-90deg, #9b494d, #bf5853);
+            text-align: center;
+            font-size: 25px;
+            color: #fff;
+            box-shadow: 0 0 20px #733544;
+            display: none;
+            opacity: 0;
+            transition: .5s;
+            position: absolute;
+            top: 0;
+            z-index: 999;
+        }
+
+        /* 响应式 */
+        @media screen and (max-width: 1000px ) {
+            #login_img {
+                display: none;
+            }
+
+            #login_wrap {
+                width: 490px;
+                margin-right: -245px;
+            }
+
+            #login {
+                width: 100%;
+
+            }
+        }
+
+        @media screen and (max-width: 560px ) {
+            #login_wrap {
+                width: 330px;
+                margin-right: -165px;
+            }
+
+            #login span {
+                margin-left: -125px;
+            }
+
+            .form input {
+                width: 250px;
+            }
+        }
+
+        @media screen and (max-width: 345px ) {
+            #login_wrap {
+                width: 290px;
+                margin-right: -145px;
+            }
+        }
+
+        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+            transition: background-color 50000s;
+        }
+
+        input:-webkit-autofill {
+            -webkit-text-fill-color: white !important;
+        }
+    </style>
+</head>
+<body>
+<div id="bg">
+    <div id="hint"><!-- 提示框 -->
+        <p v-text="info">登录失败</p>
+    </div>
+    <div id="login_wrap">
+        <div id="login_img">
+    <span id="logimg_span" class="circle">
+        <span id="logimg_span_s1"></span>
+        <span id="logimg_span_s2"></span>
+    </span>
+            <p style="font-family:Calibri Light">
+                <i>P</i>
+                <i>L</i>
+                <i>U</i>
+                <i>T</i>
+                <i>O</i>
+                <i>N</i>
+            </p>
+        </div>
+        <div id="login">
+            <div id="status">
+                <i style="top: 0">Log</i>
+                <i style="top: 35px">Sign</i>
+                <i style="right: 5px">in</i>
+            </div>
+            <span>
+                <form action="" method="post">
+                    <p class="form">
+                        <input type="text" id="username" placeholder="输入用户名">
+                    </p>
+                    <p class="form">
+                        <input type="password" id="password" placeholder="输入密码">
+                    </p>
+                    <p class="form confirm" style="height: 0px">
+                        <input type="password" id="confirm-passwd" placeholder="确认密码">
+                    </p>
+                    <div class="form code"  style="display: none;" >
+                             <input type="text" placeholder="请输入手机号" autocomplete="off" id="phone" name="phone">
+                     </div>
+                    <div class="form code" style="display: none;margin-top: -20px">
+                            <input type="text" placeholder="请输入验证码" autocomplete="off" id="code" name="code"
+                                    class="" style="width: 50%;">
+                            <input type="button" class="btn" value="获取验证码" id="sendBtn"
+                                   style="width:46%;"
+                                   onclick="sendCode(this)">
+                    </div>
+                     <input id="login_btn" type="button" class="btn" onclick="logins()" value="Log in"
+                            style="margin-right: 20px">
+                    <input id="sign_btn" class="btn" type="button" onclick="signin()" value="Sign in">
+                </form>
+            </span>
+        </div>
+    </div>
+
+</div>
+</body>
+<script src="layui/layui.js"></script>
+<script src="vue/vue.js"></script>
+<script src="js/jquery-1.4.2.js"></script>
+<script>
+    function sendCode(){
+        var phone = $("#phone").val();
+        console.log(phone.length);
+        if(phone == '' || phone.length != 11){
+            layer.msg("请输入正确的手机号！");
+            return;
+        }else{
+            console.log(phone)
+            $.ajax({
+                method: 'get',
+                url: '/code',
+                data: {
+                    phone : phone
+                },
+                success: function(data) {
+                    console.log(data)
+                    if(data){
+                        timer();
+                    }else{
+                        $("#hint>p").text("获取验证码失败")
+                        hint();
+                    }
+                },
+                error: function(data) {
+                    $("#hint>p").text("连接超时！")
+                    hint();
+                },
+            });
+        }
+    }
+
+    var wait = 60;
+    //倒计时
+    function timer() {
+        if(wait == 0){
+            $("#sendBtn").val("获取验证码");
+            $("#sendBtn").removeAttr("disabled");
+            $("#sendBtn").css("border-color","1e9fff").css("cursor", "pointer");
+            wait = 60;
+        }else{
+            $("#sendBtn").attr("disabled","true");
+            $("#sendBtn").css("cursor", "not-allowed");
+            $("#sendBtn").val(wait + "秒后重发");
+            wait--;
+            setTimeout(function() {timer()}, 1000);
+        }
+    }
+
+    function hint() {
+        $("#hint").css("display", "block")
+        setTimeout(function () {
+            $("#hint").css("opacity", 1)
+        }, 0)
+        setTimeout(function () {
+            $("#hint").css("opacity", 0)
+        }, 3000)
+        setTimeout(function () {
+            $("#hint").css("display", "none")
+        }, 4000)
+    }
+
+    var onoff = true//根据此布尔值判断当前为注册状态还是登录状态
+    var confirm = document.getElementsByClassName("confirm")[0]
+    var user = document.getElementById("username")
+    var passwd = document.getElementById("password")
+    var con_pass = document.getElementById("confirm-passwd")
+
+    //注册按钮
+    function signin() {
+        let status = document.getElementById("status").getElementsByTagName("i")
+        if (onoff) {
+            confirm.style.height = 51 + "px"
+            $(".code").css("display","block")
+            status[0].style.top = 35 + "px"
+            status[1].style.top = 0
+            onoff = !onoff
+        } else {
+            let pwd = $("#password").val();
+            let pwds = $("#confirm-passwd").val();
+            if (!/^[A-Za-z0-9_]+$/.test($("#username").val())) {
+                $("#hint>p").text("用户名只能由字母、数字、下划线组成")
+                hint()
+            } else if (!/^[A-Za-z0-9]+$/.test($("#password").val())) {
+                $("#hint>p").text("密码只能由字母大小写、数字组成")
+                hint()
+            } else if ($("#username").val().length < 4) {
+                $("#hint>p").text("用户名不能少于4位")
+                hint()
+            } else if (pwd != pwds) {
+                $("#hint>p").text("两次密码输入不正确")
+                hint()
+            } else if ($("#password").val().length < 6) {
+                $("#hint>p").text("密码不能少于6位")
+                hint()
+            } else {
+                $("#hint>p").text("正在验证")
+                hint()
+                let data = {
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                    confirm: $("#confirm-passwd").val(),
+                    phone:$("#phone").val(),
+                    code:$("#code").val()
+                }
+                $.ajax({
+                    url: "/register",
+                    method: "post",
+                    data: data,
+                    success: function (reg) {
+                        console.log(reg)
+                        if (reg == "注册成功") {
+                            $("#hint>p").text(reg)
+                            hint()
+                            let status = document.getElementById("status").getElementsByTagName("i")
+                            $(".code").css("display","none")
+                            confirm.style.height = 0
+                            status[0].style.top = 0
+                            status[1].style.top = 35 + "px"
+                            onoff = !onoff
+                        } else {
+                            $("#hint>p").text(reg)
+                            hint()
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    //登录按钮
+    function logins() {
+        if (onoff) {
+            $("#hint>p").text("正在登录")
+            hint()
+            $.ajax({
+                type: "post",
+                url: "/login",
+                data: "username=" + $("#username").val() + "&password=" + $("#password").val(),
+                success: function (data) {
+                    console.log(data)
+                    if (data === "success") {
+                        location.href = 'home.html'
+                    } else {
+                        $("#hint>p").text(data)
+                        hint()
+                    }
+                }
+            })
+
+        } else {
+            let status = document.getElementById("status").getElementsByTagName("i")
+            $(".code").css("display","none")
+            confirm.style.height = 0
+            status[0].style.top = 0
+            status[1].style.top = 35 + "px"
+            onoff = !onoff
+        }
+    }
+
+    h = $(window).height();
+    $("#login_bg").css("height", h + "px")
+    onresize = function () {
+        h = $(window).height();
+        w = $(window).width();
+        $("#login_bg").css("height", h + "px")
+    }
+    layui.use('element', function () {
+        var element = layui.element;
+        //一些事件监听
+        element.on('tab(demo)', function (data) {
+            console.log(data);
+        });
+    });
+
+    //layui复选框
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+    layui.use('element', function () {
+        var element = layui.element;
+
+        //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+        var layid = location.hash.replace(/^#test1=/, '');
+        element.tabChange('test1', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+
+        //监听Tab切换，以改变地址hash值
+        element.on('tab(test1)', function () {
+            location.hash = 'test1=' + this.getAttribute('lay-id');
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .layui-row {
+            margin-top: 20px;
+        }
+
+        #title {
+            font-family: 等线;
+            font-size: 30px;
+        }
+
+        #decoration {
+            margin-top: 20px;
+            background-color: #999999;
+            width: 70px;
+            height: 2px;
+        }
+
+        #price {
+            font-family: 新宋体;
+            margin-top: 20px;
+            font-size: 30px;
+        }
+
+        #serial, #intro {
+            font-weight: normal;
+            color: rgb(102, 102, 102);
+            font-family: "微软雅黑", microsoft yahei;
+            margin-top: 20px;
+            font-size: 15px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .el-input-number {
+            margin-left: 10px;
+            width: 100px;
+        }
+
+        .comment, .comment_dateTime {
+            width: 70%
+        }
+
+        .comment_dateTime {
+            margin-top: 5px;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+<header class="layui-row ">
+    <div id="shoppingApp">
+        <div class="layui-col-md5 layui-col-sm5">
+            <img style="width: 400px;height: 400px;" class="img-responsive" :src="json.url" alt="">
+        </div>
+        <div class="layui-col-md6 layui-col-sm8">
+            <p id="title" v-text="json.title"></p>
+            <div id="decoration"></div>
+            <p id="price" v-text="'¥ '+json.price"></p>
+            <p id="intro" v-text="json.intro"></p>
+            <p id="serial" v-text="'商品编号:'+json.id"></p>
+        </div>
+    </div>
+    <div id="add">
+        <button class="layui-btn layui-btn-lg" id="shopping">加入购物车</button>
+        <template>
+            <el-input-number size="100px" v-model="num" controls-position="right" @change="handleChange" :min="1"
+                             :max="999" label="购买数量"></el-input-number>
+        </template>
+    </div>
+</header>
+<!--评论-->
+<section>
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" id="commentApp">
+        <ul class="layui-tab-title">
+            <li class="layui-this">商品介绍</li>
+            <li v-text="'用户评价('+comments.length+'条)'"></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">默认宽度是相对于父元素100%适应的，你也可以固定宽度。</div>
+            <div class="layui-tab-item ">
+                <!--总体评价-->
+                <div class="layui-bg-gray" style="padding: 0px;">
+
+                    <div class="layui-row layui-col-space15" style="padding: 10px 10px 10px 80px;">
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header" align="center" style="width: 130px">总体评价</div>
+                                <div class="layui-card-body">
+                                    <!--评分星级-->
+                                    <div class="rateText" align="center"
+                                         style="font-size: 40px;color: #FFB800;width: 130px"></div>
+                                    <span id="allRate" style="margin-bottom: 4px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--用户评论-->
+                <div class="layui-row" style="margin-left: 80px">
+                    <!--评论按钮-->
+
+                    <div class="layui-btn-container" style="margin-left: 40px;">
+
+                        <button type="button" onclick="$(this).next().toggle(200)" v-if="user!=null" class="layui-btn layui-btn-sm">我要评论<i
+                                class="layui-icon"></i></button>
+
+                        <div style="display: none;font-size: 16px">
+                            <span><i class="layui-icon layui-icon-note"></i> 描述相符:</span>
+                            <span id="rate" style="margin-bottom: 5px;font-size: 15px"></span>
+                            <div style="width: 600px">
+                                <form class="layui-form" method="post">
+                                    <div style="background-color:#e2e2e2;">
+                                        <textarea id="comment" class="layui-textarea" lay-verify="content"></textarea>
+                                    </div>
+                                    <button class="layui-btn" lay-submit lay-filter="*" style="margin-top: 10px">发布评论
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="layui-border-orange">
+                    <div class="layui-col-md12" v-for="(c,i) in comments" style="padding: 10px 20px 0 20px">
+                        <img style="width: 30px;height: 30px" class="layui-nav-img" :src="c.url" alt="">
+                        <span style="font-size: 14px;" v-text="c.userNickName"></span> <span
+                            v-if="user!=null&&c.userId==user.id" style="cursor: pointer;color: #1E9FFF"  @click="removerComment(c.id,i)">删除</span>
+                        <span id="userRate" style="margin-bottom: 4px"></span>
+                        <div style="margin-left: 42px">
+                            <p class="comment " v-html="c.content"></p>
+                            <div class="comment_dateTime layui-text" style="font-size: 8px" v-text="c.duration"></div>
+                        </div>
+                        <hr class="layui-border-cyan">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/jquery-1.4.2.js"></script>
+<script src="js/details.js" type="text/javascript"></script>
+</body>
+</html>

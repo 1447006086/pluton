@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<style>
+    #test1 {
+        position: absolute;
+        left: 150px;
+        bottom: 10px;
+    }
+
+    img {
+        width: 400px;
+        height: 400px;
+    }
+</style>
+<body>
+<div>
+    <span style="display: none"></span>
+    <span style="display: none"></span>
+    <img id="img_bt" src="" alt="">
+    <button type="button" class="layui-btn" id="test1" style="display: none">重新上传</button>
+</div>
+<script src="layui/layui.js"></script>
+<script src="js/jquery-1.4.2.js"></script>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        //执行实例
+        let id=$("span").eq(0).text()
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: "/commodity/updateImg/"+id//改成您自己的上传接口
+            , choose: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#img_bt').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (r, index, upload) {
+                //假设code=0代表上传成功
+                if (r.code == 200) {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.msg(r.message, {icon: 1,offset:['220px','400px']})
+                    parent.layer.close(index);
+                    parent.table.reload('demo');
+                }
+
+                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+                var item = this.item;
+
+                //文件保存失败
+                //do something
+            }
+        })
+    });
+    $("body").hover(function () {
+        $("#test1").css("display", "block")
+    }, function () {
+        $("#test1").css("display", "none")
+    })
+</script>
+</body>
+</html>

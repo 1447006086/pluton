@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <style>
+        form {
+            margin-top: 20px;
+            margin-left: 0px;
+            width: 300px;
+        }
+
+        layui-input-block, .layui-input {
+            width: 300px;
+        }
+
+        textarea, .layui-input {
+            font-weight: bold;
+            outline: 0;
+            border: 1px solid #afb33d;
+            box-shadow: 0px 0px 10px 0px #419952;
+            -moz-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            -webkit-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+
+        label {
+            color: #574747;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 等线;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form " action="/user/add" method="post" enctype="multipart/form-data">
+    <div class="layui-form-item">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-block">
+            <input type="text" name="userNickname" required lay-verify="required" placeholder="请输入您的昵称"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label for="date">
+            <label class="layui-form-label">生日</label>
+            <div class="layui-input-block">
+                <input type="text" name="date" required id="date" lay-verify="date" placeholder="请选择生日"
+                       class="layui-input">
+            </div>
+        </label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" title="男" checked>
+            <input type="radio" name="sex" value="女" title="女">
+        </div>
+    </div>
+    <input type="text" id="url" name="url" style="display: none">
+    <div class="layui-form-item layui-form-text" style="position: relative">
+        <div class="layui-upload">
+            <label class="layui-form-label">头像</label>
+            <span>
+                <img class="layui-nav-img" id="demo1" style="width: 60px;height: 60px;">
+            </span>
+            <button type="button" class="layui-btn" id="test1">上传图片</button>
+            <button class="layui-btn" id="submit" lay-submit lay-filter="formDemo"
+                    style="margin-left: 300px;margin-top: -49px;display: none">立即提交
+            </button>
+        </div>
+    </div>
+</form>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/jquery-1.4.2.js"></script>
+<script>
+
+    layui.use(['form', 'upload', 'laydate'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        //执行实例
+        let img
+        laydate.render({
+            elem: '#date'
+        });
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '/commodity/upload/img' //改成您自己的上传接口
+            , choose: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    //图片链接（base64）
+                    $("#submit").css("display", "block")
+                });
+            },
+            done: function (r, index, upload) {
+                $("#url").val(r.message)
+                $('#demo1').attr('src', r.message);
+            }
+        })
+
+        form.on('submit(formDemo)', function (data) {
+            data.field.url = img
+            console.log(img)
+            console.log(data)
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index)
+            window.location.href='home.html'
+
+        });
+    })
+
+
+</script>
+</body>
+</html>

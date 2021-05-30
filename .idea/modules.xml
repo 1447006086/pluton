@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pluton.iml" filepath="$PROJECT_DIR$/pluton.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pluton-portal/pluton-portal.iml" filepath="$PROJECT_DIR$/pluton-portal/pluton-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pluton-resource/pluton-resource.iml" filepath="$PROJECT_DIR$/pluton-resource/pluton-resource.iml" />
+    </modules>
+  </component>
+</project>

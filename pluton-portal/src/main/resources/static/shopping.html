@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>商城</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="bootstrap3/css/bt3.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
+    <!--按钮效果-->
+    <link rel="stylesheet" href="jiaoben7812/css/style.css">
+    <!--图片效果-->
+    <link rel="stylesheet" type="text/css" href="jiaoben4190/css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="jiaoben4190/css/zzsc-demo.css">
+    <link rel="stylesheet" href="jiaoben4190/css/style.css">
+    <!--layui引入-->
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        @import url("//unpkg.com/element-ui@2.15.1/lib/theme-chalk/index.css");
+
+        body {
+            background-color: white;
+            overflow-x: hidden;
+            border: 0;
+        }
+
+        section {
+            background-color: #f5f5f5;
+        }
+
+        .layui-nav-item > a {
+            font-size: 16px;
+        }
+
+        .layui-nav-item > a, dd > a > i, dd > a {
+
+            text-decoration: none;
+        }
+
+
+        .footer_text_a {
+            margin-left: 50px;
+            font-size: 18px;
+            color: #999999;
+        }
+
+        #search_input {
+            border-radius: 30px;
+            width: 200px;
+            height: 30px;
+            position: absolute;
+            right: 100px;
+            top: 15px;
+            color: black;
+        }
+
+        .layui-breadcrumb {
+            margin-left: 30px;
+        }
+
+        .search {
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-bottom: 10px;
+        }
+
+        .seek {
+            color: #342628;
+            font-size: 16px;
+            width: 200px;
+            padding: 0 10px 10px 10px;
+            margin-top: 20px;
+            outline: none;
+            border: 0;
+            border-bottom: 2px #afb33d solid;
+            box--shadow: 0px 0px 10px 0px #419952;
+            -moz-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            -webkit-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+
+        #search {
+            outline: 0;
+            width: 300px;
+            font-weight: bold;
+            outline: 0;
+            border: 1px solid #afb33d;
+            box-shadow: 0px 0px 10px 0px #419952;
+            -moz-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            -webkit-transition: border ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            display: none;
+        }
+        #p {
+            background-color: #FFFFFF;
+            width: 70%;
+            left: 150px;
+            margin-top: -280px;
+        }
+    </style>
+</head>
+<script type="text/javascript" src="../webapp/bootstrap3/jquery.min.js"></script>
+<script src="layui/layui.js"></script>
+<body>
+<header class="layui-container" style="margin-bottom: 20px">
+    <div class="layui-container" style="margin-bottom: 20px">
+        <ul class="layui-nav text-center " lay-filter="" style="background-color: white;position: relative">
+            <img style="width: 120px;top: 22px;left:30px;position: absolute" ;
+                 src="http://localhost:8899/2021/05/14/13c3f858-0726-4190-9585-f26f8f80f90f.png"
+                 alt="">
+            <li class="layui-nav-item"><a href="home.html" style="color: black;">首页</a></li>
+            <li class="layui-nav-item"><a href="shopping.html" style="color:black;">商城</a></li>
+            <li class="layui-nav-item"><a href="" style="color: black;">关于</a></li>
+            <li class="layui-nav-item"><a href="" style="color: black;">联系</a></li>
+            <li class="layui-nav-item layui-layout-right lay-unselect">
+                <div id="app" style="position: absolute;right:110px;width: 150px;">
+                    <div class="demo-input-size">
+                        <el-input
+                                color="#000000"
+                                size="mini"
+                                placeholder="请输入搜索内容"
+                                suffix-icon="el-icon-search"
+                                v-model="input1">
+                        </el-input>
+                    </div>
+                </div>
+            </li>
+            <li class="layui-nav-item layui-layout-right "><a href="javascript:;" style="color: black;">个人中心</a>
+                <dl class="layui-nav-child" id="userApp"> <!-- 二级菜单 -->
+                    <dd v-if="!show"><a href="login.html" style="text-decoration: none"><i class="layui-icon layui-icon-user" >用户登录</i></a>
+                    </dd>
+                    <dd v-if="show"><a href="" style="text-decoration: none"><i class="layui-icon layui-icon-username" >个人资料</i></a>
+                    </dd>
+                    <dd v-if="show"><a href="" style="text-decoration: none"><i class="layui-icon layui-icon-note" >我的订单</i></a>
+                    </dd>
+                    <dd v-if="show"><a href="" @click.prevent="management()" style="text-decoration: none"><i class="layui-icon layui-icon-set-fill" >后台管理</i></a>
+                    </dd>
+                    <dd v-if="show"><a href="logout" style="text-decoration: none"><i class="layui-icon layui-icon-logout " >安全退出</i></a></dd>
+                </dl>
+            </li>
+            <!--购物车-->
+            <el-popover id="shopping" style="position: absolute;right: -55px;top: 15px" placement="right" width="250"
+                        trigger="hover" @show="show" ref='titleBadge'>
+                <div class="layui-row" v-for="(p,i) in gridData" style="margin-top: 5px">
+                    <div class="layui-col-md5 layui-col-sm6">
+                        <img :src="p.url" alt="" style="width: 80px">
+                    </div>
+                    <div class="layui-col-md7 layui-col-sm3" style="margin-top: 5px">
+                        <div v-text="p.spName" style="color: #409EFF"></div>
+                        <div style="margin-top: 5px">
+                            <span v-text="'¥'+p.spPrice" style="color: #F56C6C"></span>
+                            <span style="margin-left: 5px;margin-right: 5px">*</span>
+                            <span v-text="p.count" style="color: #0C0C0C"></span>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <span v-text="p.classify" style="font-size: 10px;color: #909399;"></span>
+                            <el-link :underline="false" @click="deleteById(p.id)"
+                                     style="font-size: 10px;color: #909399;margin-left: 5%">删除
+                            </el-link>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 5px;margin-left: 10px" class="is-center">
+                    <div v-if="shows" style="color: #F56C6C;" class="text-center">你还没有添加商品</div>
+                    <el-button v-if="userShow" @click="login" type="danger" size="small" icon="el-icon-user"
+                               style="margin-left: 28%">请登录
+                    </el-button>
+                    <el-button v-if="block" @click="location" type="danger" size="small" icon="el-icon-shopping-cart-2">
+                        查看购物车
+                    </el-button>
+                    <el-button v-if="block" type="success" size="small" icon="el-icon-shopping-bag-2">结算</el-button>
+                </div>
+                <el-badge :value="gridData.length" v-model="gridData.length" :max="10" class="item" slot="reference">
+                    <el-button @click="location" size="small" icon="el-icon-shopping-cart-1"></el-button>
+                </el-badge>
+            </el-popover>
+        </ul>
+    </div>
+</header>
+<!--侧边栏开始-->
+<section class="layui-container" id="classifyApp" style="background-color: #FFFFFF;">
+<span class="layui-breadcrumb ">
+  <a href="home.html" id="index">首页</a>
+  <a href="shopping.html"><cite>商城</cite></a>
+</span>
+    <div class="search">
+        <input lay-search type="text" class="seek" @change="search($event)" placeholder="搜索商品">
+    </div>
+    <ul class="layui-nav layui-nav-tree" lay-filter="test" style="margin-left: 30px;">
+        <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+        <li class="layui-nav-item tree">
+            <a href="shopping.html">所有商品</a>
+        </li>
+        <li class="layui-nav-item tree" v-for="c in classifys">
+            <a href="#index" @click="seek(c.id)" v-text="c.name"></a>
+        </li>
+    </ul>
+
+</section>
+
+
+<section id="p" class="layui-container">
+    <iframe name="gogo" id="gogo" src="sdetails.html" frameborder="0" style="margin-bottom: 100px"></iframe>
+    <div class="layui-row" id="mydiv">
+        <div class="layui-col-md4 layui-col-sm6 footer_img" v-for="(p,i) in json" :value="p.id" @click="ck(p.id)">
+            <a href="#index">
+                <div class="gallery-item">
+                    <div class="gallery-item-image">
+                        <img class="img-responsive commodity-img" :src="p.url" style="width: 260px" alt="">
+                    </div>
+                    <div class="gallery-item-description">
+                        <h5 v-text="p.title"></h5>
+                        <span v-text="'¥'+p.price"></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <a href="#index">
+        <div id="page" style="margin-left: 340px"></div>
+    </a>
+</section>
+<!--侧边栏结束-->
+
+
+<footer class="layui-container" style="margin-top: 200px">
+    <!--结尾-->
+    <div style="margin-left: 30px">
+        <div style="margin-top: 80px">
+            <img src="http://w-31797-95679-82599.4710025256.sites.cnfree06.qifeiye.com/qfy-content/uploads/2020/04/5cd581fe719af807b449e1d9d5c2ed97-150x34.png"
+                 alt="">
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <p style="color: #999999;margin-top: 20px;font-size: 16px">如果您有任何疑问，或者想要实现室内创意。请不要犹豫，<br>并通过此电话号码与我们联系。
+                </p>
+                <p style="color: black;margin-top: 30px;font-size: 26px;font-family: '新宋体'">电话：+86123 1234
+                    1234</p>
+                <p style="margin-top: 30px;color: #999999">中国江苏省南京市金鸡湖北路188号</p>
+                <p style="color: #916c60;margin-top: 5px;font-size: 18px">pluton@email.com</p>
+            </div>
+            <div class="layui-col-md3 layui-col-lg-offset2">
+                <div style="margin-top: 10px">
+                    <a href="" class="footer_text_a">餐具</a>
+                    <a href="" class="footer_text_a">首页</a>
+                </div>
+                <div style="margin-top: 10px">
+                    <a href="" class="footer_text_a">酒具</a>
+                    <a href="" class="footer_text_a">商店</a>
+                </div>
+                <div style="margin-top: 10px">
+                    <a href="" class="footer_text_a">茶具</a>
+                    <a href="" class="footer_text_a">博客</a>
+                </div>
+                <div style="margin-top: 10px">
+                    <a href="" class="footer_text_a">杯/碟</a>
+                    <a href="" class="footer_text_a">联系</a>
+                </div>
+                <div style="margin-top: 10px">
+                    <a href="" class="footer_text_a">汤匙筷</a>
+                    <a href="" class="footer_text_a">快递</a>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="color: #999999; padding: 100px 0 80px 0px">
+            <div class="layui-col-md6">
+                <p>Copyright © 2021 我的第一个商城</p>
+            </div>
+            <div class="layui-col-md2 layui-col-lg-offset4">
+                <a href=""><i class="layui-icon layui-icon-login-wechat"></i></a>
+                <a href=""><i class="layui-icon layui-icon-login-qq"></i></a>
+                <a href=""><i class="layui-icon layui-icon-login-weibo"></i></a>
+                <a href=""><i class="layui-icon layui-icon-star-fill"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/jquery-1.4.2.js"></script>
+<script src="js/nav.js" type="text/javascript"></script>
+<script src="js/shopping.js" type="text/javascript"></script>
+<script>
+    $(window.parent.document).find("#gogo").load(function () {
+        var main = $(window.parent.document).find("#gogo");
+        var thisheight = $(document).height() ;
+        main.height(thisheight);
+    });
+</script>
+</html>
